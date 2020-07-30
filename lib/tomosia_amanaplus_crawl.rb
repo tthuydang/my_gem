@@ -8,16 +8,12 @@ def scraper(keyword)
   images_listings = parsed_page.css("div.p-item-thumb__content")
 
   images = Array.new
-
   pages = parsed_page.css("div.c-paginate__nums").css('a').last.text.to_i # tổng số page
-  # text_total = parsed_page.css("h1.p-search-result__ttl").text  # chuỗi chứa tổng items. Vd: 「heo」の素材:230件（1 - 100件を表示）
-  # total = text_total.split(' ')[0][keyword.length + 6, text_total.length - 4].chop.chop.chop  # tổng số item của tất cả các page
-  # total = total.gsub(',', '').to_i  # bỏ dấu phẩy của dãy số
 
   i = 0
   curr_page = 1
   while curr_page <= pages
-    puts "crawling page #{curr_page}"
+    puts "crawling page #{curr_page}......................"
 
     pagination_unparsed_page = HTTParty.get("https://plus.amanaimages.com/items/search/#{keyword}?page=#{curr_page}")
     pagination_parsed_page = Nokogiri::HTML(pagination_unparsed_page)
@@ -37,6 +33,7 @@ def scraper(keyword)
 
     curr_page += 1
   end
+  puts "images count: #{images.length}"
 end
 
 scraper("heo")
