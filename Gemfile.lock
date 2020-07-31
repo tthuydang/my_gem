@@ -1,11 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.7.0)
-      public_suffix (>= 2.0.2, < 5.0)
     byebug (11.1.3)
-    down (5.1.1)
-      addressable (~> 2.5)
     httparty (0.18.1)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -16,16 +12,18 @@ GEM
     multi_xml (0.6.0)
     nokogiri (1.10.10-x64-mingw32)
       mini_portile2 (~> 2.4.0)
-    public_suffix (4.0.5)
+    ruby-ole (1.2.12.2)
+    spreadsheet (1.2.6)
+      ruby-ole (>= 1.0)
 
 PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
   byebug
-  down
   httparty
   nokogiri
+  spreadsheet
 
 BUNDLED WITH
    1.17.2

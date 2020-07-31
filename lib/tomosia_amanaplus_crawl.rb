@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'httparty'
 require 'open-uri'
+require 'spreadsheet'
 require 'byebug'
 
 class TomosiaAmanaplusCrawl
@@ -15,6 +16,7 @@ class TomosiaAmanaplusCrawl
 
     images = getPaginationImages(images_listings, pages, keyword)
     downloadImages(images, "F:/Ruby/My Gem/downloads", 4)
+    writeToExcel(images, "F:/Ruby/My Gem/downloads")
   end
 
   def getPaginationImages(images_listings, pages, keyword)  # lấy tất cả image của các page cộng lại
@@ -60,6 +62,20 @@ class TomosiaAmanaplusCrawl
     end # end if
   end
 
+  def writeToExcel(images, destination)
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+
+    sheet1.row(0).concat %w{Title Url Size Extension}
+    i = 0
+    images.each do |img|
+      sheet1.row(i += 1).push img[:title], img[:url], img[:size], img[:extension]
+    end
+
+    book.write 'F:/Ruby/My Gem/YeuNgucLep.xls'
+  end
+
 end
 
+# tomosia_amanaplus_crawl "hoian" --destination "C:\Users\NhatHuy\Pictures" --number=100
 TomosiaAmanaplusCrawl.new.run("heo")  # hoian
