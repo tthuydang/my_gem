@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'httparty'
+require 'open-uri'
 require 'byebug'
 
 class TomosiaAmanaplusCrawl
@@ -13,6 +14,7 @@ class TomosiaAmanaplusCrawl
     images_listings = parsed_page.css("div.p-search-result__body") # danh sách các thẻ div chứa image
 
     images = getPaginationImages(images_listings, pages, keyword)
+    downloadImages(images, "F:/Ruby/My Gem/downloads", 4)
   end
 
   def getPaginationImages(images_listings, pages, keyword)  # lấy tất cả image của các page cộng lại
@@ -35,13 +37,29 @@ class TomosiaAmanaplusCrawl
           extension: ".#{src.to_s.split('.').last}"
         }
         images << current_image
-        puts "#{i += 1}: #{src}"
+        # puts "#{i += 1}: #{src}"
       end
   
       curr_page += 1
     end
     images
   end
+
+  # tải hình và cập nhật lại size
+  def downloadImages(images, destination, n)
+    if n <= images.size
+      File.size('./tomosia_amanaplus_crawl.rb')
+      for i in 0..(n - 1) do
+        open(images[i][:url]) do |image|
+          File.open("#{destination}/#{images[i][:url].split('/').last}", "wb") do |file|
+            file.write(image.read) # lưu hình ảnh
+            images[i][:size] = image.size # cập nhật lại size trong mảng images
+          end
+        end # end open
+      end # end for
+    end # end if
+  end
+
 end
 
-TomosiaAmanaplusCrawl.new.run("hoian")
+TomosiaAmanaplusCrawl.new.run("heo")  # hoian
