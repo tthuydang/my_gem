@@ -56,11 +56,11 @@ module TomosiaAmanaplusCrawl
       threads = []
       print "\nDownloading"
       images.each do |curr_image|
-        threads << Thread.new(curr_image) { |current|
-          open(current[:url]) do |image|
-            File.open("#{path}/#{current[:url].split('/').last}", "a+") do |file|
+        threads << Thread.new(curr_image) {
+          open(curr_image[:url]) do |image|
+            File.open("#{path}/#{curr_image[:url].split('/').last}", "a+") do |file|
               file.write(image.read) # lưu hình ảnh
-              current[:size] = image.size # cập nhật lại size trong mảng images
+              curr_image[:size] = image.size # cập nhật lại size trong mảng images
               print "."
             end
           end # end open
