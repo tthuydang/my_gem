@@ -54,20 +54,20 @@ module TomosiaAmanaplusCrawl
       Dir.mkdir path unless File.exist? path
 
       threads = []
-      print "\nDownload"
+      print "\nDownloading"
       images.each do |curr_image|
-        threads << Thread.new(curr_image) {
-          open(curr_image[:url]) do |image|
-            File.open("#{path}/#{curr_image[:url].split('/').last}", "a+") do |file|
+        threads << Thread.new(curr_image) { |current|
+          open(current[:url]) do |image|
+            File.open("#{path}/#{current[:url].split('/').last}", "a+") do |file|
               file.write(image.read) # lưu hình ảnh
-              curr_image[:size] = image.size # cập nhật lại size trong mảng images
+              current[:size] = image.size # cập nhật lại size trong mảng images
               print "."
             end
           end # end open
         }
       end
       threads.each { |t| t.join }
-      puts "\nDownload ok."
+      puts "\nDownloaded."
     end
 
     def writeToExcel(images, destination)
@@ -79,11 +79,11 @@ module TomosiaAmanaplusCrawl
 
       i = 0
       sheet1.row(0).concat %w{Title Url Size(bytes) Extension}
-      puts "Write..........."
+      puts "Writing..........."
       images.each do |img|
         sheet1.row(i += 1).push img[:title], img[:url], img[:size], img[:extension]
       end
-      puts "Write ok."
+      puts "Writed."
 
       book.write "#{path}/YeuNgucLep.xls"
     end
@@ -92,4 +92,4 @@ module TomosiaAmanaplusCrawl
 end
 
 # tomosia_amanaplus_crawl "hoian" --destination "C:\Users\NhatHuy\Pictures" --number=100
-TomosiaAmanaplusCrawl::Crawler.new.run("hoian", "F:/Ruby/My Gem")  # hội an
+TomosiaAmanaplusCrawl::Crawler.new.run("hoian", "./")  # hội an
